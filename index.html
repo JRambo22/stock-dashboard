@@ -3,6 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <title>Image Gallery</title>
+  <style>
+    #gallery {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #gallery img {
+      width: 200px;  /* Set your preferred width */
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    }
+  </style>
 </head>
 <body>
 
@@ -10,7 +24,6 @@
   <div id="gallery"></div>
 
   <script>
-    // List all your image files here exactly as named in the images folder
     const imageFiles = [
       'Common Patterns.jpg',
       'Entry Pattern 2.jpg',
@@ -26,7 +39,13 @@
       const img = document.createElement('img');
       img.src = 'images/' + encodeURIComponent(filename);
       img.alt = filename;
-      img.style = "max-width: 300px; margin: 10px; height: auto;";
+
+      // Optional: show border if image fails to load
+      img.onerror = () => {
+        img.alt = "Image not found";
+        img.style.border = "2px solid red";
+      };
+
       galleryDiv.appendChild(img);
     });
   </script>
