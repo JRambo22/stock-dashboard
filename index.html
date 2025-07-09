@@ -1,28 +1,48 @@
-<h2>Stock List Table</h2>
-<table border="1" id="stock-table">
-  <thead><tr><th>Stock Name</th></tr></thead>
-  <tbody></tbody>
-</table>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Stock List</title>
+</head>
+<body>
 
-<script>
-  fetch('Defensive Stock List.csv')
-    .then(response => response.text())
-    .then(text => {
-      const lines = text.trim().split('\n');
-      const headers = lines[0].split(',');
-      const stockNameIndex = headers.indexOf("Stock Name");
+  <h2>List of Stocks</h2>
+  <ul id="stock-list"></ul>
 
-      const tbody = document.querySelector('#stock-table tbody');
+  <script>
+    fetch('data.csv')
+      .then(response => response.text())
+      .then(text => {
+        // Split all lines, skip first two lines (0 and 1)
+        const allLines = text.trim().split('\n');
+        const lines = allLines.slice(2); // skip first two rows
 
-      for(let i = 1; i < lines.length; i++) {
-        const row = lines[i].split(',');
-        const stockName = row[stockNameIndex].trim();
+        // The new first line is header
+        const headers = lines[0].split(',');
 
-        const tr = document.createElement('tr');
-        const td = document.createElement('td');
-        td.textContent = stockName;
-        tr.appendChild(td);
-        tbody.appendChild(tr);
-      }
-    });
-</script>
+        // Find the index of "Stock Name" in header
+        const stockNameIndex = headers.indexOf("Stock Name");
+
+        const stockListElement = document.getElementById('stock-list');
+
+        // Loop through rows starting from line 1 (which is the first data row after header)
+        for(let i = 1; i < lines.length; i++) {
+          const row = lines[i].split(',');
+
+          // Sometimes CSV fields might have commas, so we might want to use a proper CSV parser later, but let's try simple split for now.
+
+          const stockName = row[stockNameIndex] ? row[stockNameIndex].trim() : '';
+
+          if(stockName) {
+            const li = document.createElement('li');
+            li.textContent = stockName;
+            stockListElement.appendChild(li);
+          }
+        }
+      })
+      .catch(error => {
+        console.error('Error loading CSV:', error);
+      });
+  </script>
+
+</body>
+</html>
