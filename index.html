@@ -4,18 +4,37 @@
   <meta charset="UTF-8" />
   <title>Stock Patterns to Check</title>
   <style>
-    #gallery {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
     }
 
-    #gallery img {
-      width: 40%;  /* Set your preferred width */
-      margin: 10px 0;
-      height: 40%;
+    h1 {
+      text-align: center;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .row img {
+      width: 48%;
       border: 1px solid #ccc;
-      box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+      .row {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .row img {
+        width: 90%;
+        margin-bottom: 10px;
+      }
     }
   </style>
 </head>
@@ -35,19 +54,25 @@
 
     const galleryDiv = document.getElementById('gallery');
 
-    imageFiles.forEach(filename => {
-      const img = document.createElement('img');
-      img.src = 'images/' + encodeURIComponent(filename);
-      img.alt = filename;
+    for (let i = 0; i < imageFiles.length; i += 2) {
+      const rowDiv = document.createElement('div');
+      rowDiv.className = 'row';
 
-      // Optional: show border if image fails to load
-      img.onerror = () => {
-        img.alt = "Image not found";
-        img.style.border = "2px solid red";
-      };
+      for (let j = i; j < i + 2 && j < imageFiles.length; j++) {
+        const img = document.createElement('img');
+        img.src = 'images/' + encodeURIComponent(imageFiles[j]);
+        img.alt = imageFiles[j];
 
-      galleryDiv.appendChild(img);
-    });
+        img.onerror = () => {
+          img.alt = "Image not found";
+          img.style.border = "2px solid red";
+        };
+
+        rowDiv.appendChild(img);
+      }
+
+      galleryDiv.appendChild(rowDiv);
+    }
   </script>
 
 </body>
