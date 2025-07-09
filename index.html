@@ -1,41 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My Stock List</title>
+  <title>Defensive Stock List</title>
 </head>
 <body>
 
-  <h2>List of Stocks</h2>
+  <h2>Defensive Stock List</h2>
   <ul id="stock-list"></ul>
 
   <script>
-    fetch('data.csv')
+    fetch('Defensive%20Stock%20List.csv')  // URL encode spaces as %20
       .then(response => response.text())
       .then(text => {
-        // Split all lines, skip first two lines (0 and 1)
         const allLines = text.trim().split('\n');
-        const lines = allLines.slice(2); // skip first two rows
+        const lines = allLines.slice(2);  // skip first two heading lines
 
-        // The new first line is header
+        // Header row is now lines[0]
         const headers = lines[0].split(',');
-
-        // Find the index of "Stock Name" in header
         const stockNameIndex = headers.indexOf("Stock Name");
 
         const stockListElement = document.getElementById('stock-list');
 
-        // Loop through rows starting from line 1 (which is the first data row after header)
         for(let i = 1; i < lines.length; i++) {
           const row = lines[i].split(',');
 
-          // Sometimes CSV fields might have commas, so we might want to use a proper CSV parser later, but let's try simple split for now.
-
-          const stockName = row[stockNameIndex] ? row[stockNameIndex].trim() : '';
-
-          if(stockName) {
-            const li = document.createElement('li');
-            li.textContent = stockName;
-            stockListElement.appendChild(li);
+          // Defensive: Check if index exists
+          if(row.length > stockNameIndex) {
+            const stockName = row[stockNameIndex].trim();
+            if(stockName) {
+              const li = document.createElement('li');
+              li.textContent = stockName;
+              stockListElement.appendChild(li);
+            }
           }
         }
       })
