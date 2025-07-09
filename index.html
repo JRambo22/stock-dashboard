@@ -2,13 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Common Patterns</title>
+  <title>Image Gallery</title>
 </head>
 <body>
 
-  <h1>Common Patterns</h1>
+  <h1>Image Gallery</h1>
+  <div id="gallery"></div>
 
-  <img src="Common%20Patterns.jpg" alt="Common Patterns" style="max-width: 100%; height: auto;" />
+  <script>
+    // List all your image files here exactly as named in the images folder
+    const imageFiles = [
+      'Common Patterns.jpg',
+      'Entry Pattern 2.jpg',
+      'Entry Pattern.jpg',
+      'GS Trader Pattern.jpg',
+      'Wyckoff Method Scheematics - Accumulation.jpg',
+      'Wyckoff Method Scheematics - Distribution.jpg'
+    ];
+
+    const galleryDiv = document.getElementById('gallery');
+
+    imageFiles.forEach(filename => {
+      const img = document.createElement('img');
+      img.src = 'images/' + encodeURIComponent(filename);
+      img.alt = filename;
+      img.style = "max-width: 300px; margin: 10px; height: auto;";
+      galleryDiv.appendChild(img);
+    });
+  </script>
 
 </body>
 </html>
