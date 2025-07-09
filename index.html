@@ -2,51 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>My Stock Website</title>
+  <title>Common Patterns</title>
 </head>
 <body>
-  <h1>My Defensive Stock List</h1>
 
-  <!-- Your uploaded image -->
-  <img src="Common%20Patterns.jpg" alt="Common Patterns" width="600" />
+  <h1>Common Patterns</h1>
 
-  <h2>Stocks</h2>
-  <ul id="stock-list"></ul>
+  <img src="Common%20Patterns.jpg" alt="Common Patterns" style="max-width: 100%; height: auto;" />
 
-  <!-- PapaParse for CSV -->
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-
-  <script>
-    const csvFile = 'stocks.csv';  // your CSV filename here
-
-    fetch(csvFile)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to load CSV: ' + response.status);
-        }
-        return response.text();
-      })
-      .then(csvText => {
-        const results = Papa.parse(csvText, {
-          header: true,
-          skipEmptyLines: true
-        });
-
-        const stockList = document.getElementById('stock-list');
-
-        results.data.forEach(row => {
-          const stockName = row['Stock Name'];
-          if (stockName) {
-            const li = document.createElement('li');
-            li.textContent = stockName;
-            stockList.appendChild(li);
-          }
-        });
-      })
-      .catch(error => {
-        document.body.insertAdjacentHTML('beforeend', '<p style="color:red;">Error: ' + error.message + '</p>');
-        console.error(error);
-      });
-  </script>
 </body>
 </html>
