@@ -1,44 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Defensive Stock List</title>
+  <meta charset="UTF-8" />
+  <title>My Stock Website</title>
 </head>
 <body>
+  <h1>My Defensive Stock List</h1>
 
-  <h2>Defensive Stock List</h2>
+  <!-- Your uploaded image -->
+  <img src="Common%20Patterns.jpg" alt="Common Patterns" width="600" />
+
+  <h2>Stocks</h2>
   <ul id="stock-list"></ul>
 
+  <!-- PapaParse for CSV -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
   <script>
-    fetch('Defensive%20Stock%20List.csv')  // URL encode spaces as %20
-      .then(response => response.text())
-      .then(text => {
-        const allLines = text.trim().split('\n');
-        const lines = allLines.slice(2);  // skip first two heading lines
+    const csvFile = 'stocks.csv';  // your CSV filename here
 
-        // Header row is now lines[0]
-        const headers = lines[0].split(',');
-        const stockNameIndex = headers.indexOf("Stock Name");
-
-        const stockListElement = document.getElementById('stock-list');
-
-        for(let i = 1; i < lines.length; i++) {
-          const row = lines[i].split(',');
-
-          // Defensive: Check if index exists
-          if(row.length > stockNameIndex) {
-            const stockName = row[stockNameIndex].trim();
-            if(stockName) {
-              const li = document.createElement('li');
-              li.textContent = stockName;
-              stockListElement.appendChild(li);
-            }
-          }
+    fetch(csvFile)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to load CSV: ' + response.status);
         }
+        return response.text();
+      })
+      .then(csvText => {
+        const results = Papa.parse(csvText, {
+          header: true,
+          skipEmptyLines: true
+        });
+
+        const stockList = document.getElementById('stock-list');
+
+        results.data.forEach(row => {
+          const stockName = row['Stock Name'];
+          if (stockName) {
+            const li = document.createElement('li');
+            li.textContent = stockName;
+            stockList.appendChild(li);
+          }
+        });
       })
       .catch(error => {
-        console.error('Error loading CSV:', error);
+        document.body.insertAdjacentHTML('beforeend', '<p style="color:red;">Error: ' + error.message + '</p>');
+        console.error(error);
       });
   </script>
-
 </body>
 </html>
