@@ -1,5 +1,8 @@
-<h2>List of Stocks</h2>
-<ul id="stock-list"></ul>
+<h2>Stock List Table</h2>
+<table border="1" id="stock-table">
+  <thead><tr><th>Stock Name</th></tr></thead>
+  <tbody></tbody>
+</table>
 
 <script>
   fetch('Defensive Stock List.csv')
@@ -9,15 +12,17 @@
       const headers = lines[0].split(',');
       const stockNameIndex = headers.indexOf("Stock Name");
 
-      const stockListElement = document.getElementById('stock-list');
+      const tbody = document.querySelector('#stock-table tbody');
 
       for(let i = 1; i < lines.length; i++) {
         const row = lines[i].split(',');
         const stockName = row[stockNameIndex].trim();
 
-        const li = document.createElement('li');
-        li.textContent = stockName;
-        stockListElement.appendChild(li);
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        td.textContent = stockName;
+        tr.appendChild(td);
+        tbody.appendChild(tr);
       }
     });
 </script>
