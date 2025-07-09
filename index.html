@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Stock Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h2>Stocks by Industry</h2>
+  <canvas id="industryChart" width="600" height="400"></canvas>
+
+  <script>
+    fetch('data.csv')
+      .then(response => response.text())
+      .then(text => {
+        const lines = text.trim().split('\n');
+        const headers = lines[0].split(',');
+        const industryIndex = headers.indexOf("Industry");
+
+        const industryCounts = {};
+        for (let i = 1; i < lines.length; i++) {
+          const row = lines[i].split(',');
+          const industry = row[industryIndex].trim();
+          industryCounts[industry] = (industryCounts[industry] || 0) + 1;
+        }
+
+        const labels = Object.keys(industryCounts);
+        const data = Object.values(industryCounts);
+
+        new Chart(document.getElementById("industryChart"), {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: '# of Stocks',
+              data: data,
+              backgroundColor: 'steelblue'
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+      });
+  </script>
+</body>
+</html>
